@@ -24,7 +24,7 @@ pip install -r requirements.txt
 ```
 Создаем файл с переменными окружения (данный токен вымышленный, вам необходимо заменить его на свой).
 ```
-echo TOKEN=fa387498802363as08c511970ab9e4df797d0afd > .env
+echo TOKEN_BITLINK=fa387498802363as08c511970ab9e4df797d0afd > .env
 ```
 Запуск приложения.
 ```

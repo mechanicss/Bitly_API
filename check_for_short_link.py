@@ -2,10 +2,6 @@ import requests, os
 from dotenv import load_dotenv
 
 
-load_dotenv()
-token = os.environ['TOKEN']
-
-
 def shorten_link(token, user_input):
 
     link = 'https://api-ssl.bitly.com/v4/shorten'
@@ -14,11 +10,11 @@ def shorten_link(token, user_input):
         'Authorization': f'Bearer {token}',
     }
 
-    data = {
+    payload = {
         'long_url': user_input,
     }
 
-    response = requests.post(url=link, headers=headers, json=data, timeout=5)
+    response = requests.post(url=link, headers=headers, json=payload, timeout=5)
     response.raise_for_status()
 
     return response.json().get('id')
@@ -44,15 +40,23 @@ def count_clicks(token, bitlink):
 
 def is_bitlink(url_input):
     try:
-        print(count_clicks(token, bitlink=url_input), 'кликов')
+        count_clicks(token, bitlink=url_input)
+        return True
+    
     except requests.exceptions.HTTPError as ex:
-        try:
-            print('Битлинк', shorten_link(token, user_input=url_input))
-        except requests.exceptions.HTTPError as ex:
-            exit(ex)
+        return False
 
 
 if __name__ == '__main__':
+    load_dotenv()
+    token = os.environ['TOKEN_BITLINK']
 
-    is_bitlink(input('Укажите ссылку: \n'))
+    url_input  = input('Укажите ссылку: ')
+
+    bitlink_status = is_bitlink(url_input)
+
+    if bitlink_status == True:
+        print(count_clicks(token, bitlink=url_input), 'кликов')
+    else:
+        print('Битлинк', shorten_link(token, user_input=url_input))
 
