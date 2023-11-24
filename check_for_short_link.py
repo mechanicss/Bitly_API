@@ -38,7 +38,7 @@ def count_clicks(token, bitlink):
     return response.json().get('total_clicks')
 
 
-def is_bitlink(url_input):
+def is_bitlink(url_input, token):
     try:
         count_clicks(token, bitlink=url_input)
         return True
@@ -49,13 +49,13 @@ def is_bitlink(url_input):
 
 if __name__ == '__main__':
     load_dotenv()
-    token = os.environ['TOKEN_BITLINK']
+    token = os.environ['BITLINK_TOKEN']
 
     url_input  = input('Укажите ссылку: ')
 
-    bitlink_status = is_bitlink(url_input)
+    bitlink_status = is_bitlink(url_input, token)
 
-    if bitlink_status == True:
+    if bitlink_status:
         print(count_clicks(token, bitlink=url_input), 'кликов')
     else:
         print('Битлинк', shorten_link(token, user_input=url_input))
