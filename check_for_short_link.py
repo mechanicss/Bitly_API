@@ -39,23 +39,22 @@ def count_clicks(token, bitlink):
 
 
 def is_bitlink(url_input, token):
-    try:
-        count_clicks(token, bitlink=url_input)
-        return True
+    headers = {
+    'Authorization': f'Bearer {token}',
+    }
+
+    response = requests.get(f'https://api-ssl.bitly.com/v4/bitlinks/{url_input}', headers=headers, timeout=5)
     
-    except requests.exceptions.HTTPError as ex:
-        return False
+    return response.ok
 
 
 if __name__ == '__main__':
     load_dotenv()
-    token = os.environ['BITLINK_TOKEN']
+    token = os.environ['BITLY_TOKEN']
 
     url_input  = input('Укажите ссылку: ')
 
-    bitlink_status = is_bitlink(url_input, token)
-
-    if bitlink_status:
+    if is_bitlink(url_input, token):
         print(count_clicks(token, bitlink=url_input), 'кликов')
     else:
         print('Битлинк', shorten_link(token, user_input=url_input))
